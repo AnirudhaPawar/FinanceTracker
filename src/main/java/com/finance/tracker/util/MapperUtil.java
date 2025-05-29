@@ -1,6 +1,7 @@
 package com.finance.tracker.util;
 
 import com.finance.tracker.entity.Transaction;
+import com.finance.tracker.model.CategoryDTO;
 import com.finance.tracker.model.TransactionDTO;
 
 import static java.util.Objects.nonNull;
@@ -12,7 +13,7 @@ public class MapperUtil {
         return new TransactionDTO(
                 t.getId(),
                 t.getAmount(),
-                nonNull(t.getCategory()) ? t.getCategory() : null,
+                nonNull(t.getCategory()) ? CategoryDTO.builder().id(Math.toIntExact(t.getCategory().getId())).name(t.getCategory().getName()).build() : null,
                 t.getCreatedAt(),
                 t.getUser().getId(),
                 t.getType(),

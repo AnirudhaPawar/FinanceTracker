@@ -23,8 +23,8 @@ public class BudgetService {
                 .map(BudgetMapper::toDTO).collect(Collectors.toList());
     }
 
-    public Budget findById(String userId, Integer id) {
-        return budgetRepository.findByIdAndUserId(id, Long.valueOf(userId))
+    public Budget findById(Long userId, Integer id) {
+        return budgetRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new RuntimeException("Budget not found"));
     }
 

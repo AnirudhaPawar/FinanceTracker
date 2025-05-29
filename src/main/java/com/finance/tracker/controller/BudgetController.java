@@ -8,7 +8,7 @@ import com.finance.tracker.mapper.BudgetMapper;
 import com.finance.tracker.model.BudgetDTO;
 import com.finance.tracker.service.BudgetService;
 import com.finance.tracker.service.CategoryService;
-import com.finance.tracker.service.CustomUserDetailsService;
+import com.finance.tracker.util.CurrentUserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,31 +28,30 @@ import java.util.List;
 public class BudgetController {
 
     private final BudgetService budgetService;
-
-    private final CustomUserDetailsService userDetailsService;
-
     private final CategoryService categoryService;
-
     private final BudgetMapper budgetMapper;
+    private final CurrentUserUtil userUtil;
 
     @Authenticated
     @GetMapping
-    public List<BudgetDTO> getBudgets(@RequestHeader("X-User-Id") String userId) {
-        return budgetService.getBudgetsByUserId(Long.valueOf(userId));
+    public List<BudgetDTO> getBudgets() {
+        User user = userUtil.getCurrentUser();
+        return budgetService.getBudgetsByUserId(user.getId());
     }
 
     @Authenticated
     @GetMapping("/{id}")
-    public ResponseEntity<BudgetDTO> getBudget(@RequestHeader("X-User-Id") String userId, @PathVariable Integer id) {
-        Budget budget = budgetService.findById(userId, id);
-        return ResponseEntity.ok(budgetMapper.toDTO(budget));
+    public ResponseEntity<BudgetDTO> getBudget(@PathVariable Integer id) {
+        User user = userUtil.getCurrentUser();
+        Budget budget = budgetService.findById(user.getId(), id);
+        return ResponseEntity.ok(BudgetMapper.toDTO(budget));
     }
 
     @Authenticated
     @PostMapping
-    public ResponseEntity<BudgetDTO> createBudget(@RequestHeader("X-User-Id") String userId, @RequestBody BudgetDTO budgetDTO) {
+    public ResponseEntity<BudgetDTO> createBudget(@RequestBody BudgetDTO budgetDTO) {
 
-        User user = userDetailsService.findByUserId(Long.valueOf(userId));
+        User user = userUtil.getCurrentUser();
 
         Category category = null;
         if (budgetDTO.getCategoryId() != null) {
@@ -62,17 +60,15 @@ public class BudgetController {
 
         Budget budget = budgetMapper.toEntity(budgetDTO, user, category);
         Budget saved = budgetService.save(budget);
-        return ResponseEntity.ok(budgetMapper.toDTO(saved));
+        return ResponseEntity.ok(BudgetMapper.toDTO(saved));
     }
 
     @Authenticated
     @PutMapping("/{id}")
-    public ResponseEntity<BudgetDTO> updateBudget(@RequestHeader("X-User-Id") String userIdHeader,
+    public ResponseEntity<BudgetDTO> updateBudget(
                                                   @PathVariable Integer id,
                                                   @RequestBody BudgetDTO budgetDTO) {
-        Long userId = Long.valueOf(userIdHeader);
-
-        User user = userDetailsService.findByUserId(userId);
+        User user = userUtil.getCurrentUser();
 
         Category category = null;
         if (budgetDTO.getCategoryId() != null) {
@@ -80,16 +76,17 @@ public class BudgetController {
         }
 
         Budget updatedBudget = budgetMapper.toEntity(budgetDTO, user, category);
-        Budget saved = budgetService.updateBudget(id, updatedBudget, userId);
+        Budget saved = budgetService.updateBudget(id, updatedBudget, user.getId());
 
-        return ResponseEntity.ok(budgetMapper.toDTO(saved));
+        return ResponseEntity.ok(BudgetMapper.toDTO(saved));
     }
 
 
     @Authenticated
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBudget(@RequestHeader("X-User-Id") String userId, @PathVariable Integer id) {
-        budgetService.deleteBudget(id, Long.valueOf(userId));
+    public ResponseEntity<Void> deleteBudget(@PathVariable Integer id) {
+        User user = userUtil.getCurrentUser();
+        budgetService.deleteBudget(id, user.getId());
         return ResponseEntity.ok().build();
     }
 }
