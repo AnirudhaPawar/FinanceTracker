@@ -1,12 +1,17 @@
 package com.finance.tracker.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(schema = "finance_db", name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class User {
     @Id

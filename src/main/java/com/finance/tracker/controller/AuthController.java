@@ -1,6 +1,7 @@
 package com.finance.tracker.controller;
 
 import com.finance.tracker.config.JwtUtil;
+import com.finance.tracker.entity.User;
 import com.finance.tracker.model.AuthRequest;
 import com.finance.tracker.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,8 @@ public class AuthController {
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails);
+        User user = userDetailsService.findUserByUsername(request.getUsername());
+        final String jwt = jwtUtil.generateToken(userDetails, user.getId());
 
         return ResponseEntity.ok(Collections.singletonMap("token", jwt));
     }

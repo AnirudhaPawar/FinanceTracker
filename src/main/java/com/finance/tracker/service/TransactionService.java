@@ -4,6 +4,7 @@ import com.finance.tracker.entity.Transaction;
 import com.finance.tracker.model.TransactionDTO;
 import com.finance.tracker.repository.TransactionRepository;
 import com.finance.tracker.util.MapperUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionService {
-    @Autowired
-    private TransactionRepository transactionRepository;
+
+    private final TransactionRepository transactionRepository;
 
     public Transaction saveTransaction(Transaction transaction) {
         return transactionRepository.save(transaction);

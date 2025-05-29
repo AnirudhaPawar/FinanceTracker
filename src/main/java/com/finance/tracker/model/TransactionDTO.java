@@ -1,5 +1,7 @@
 package com.finance.tracker.model;
 
+import com.finance.tracker.entity.Category;
+import com.finance.tracker.entity.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,9 @@ import java.time.LocalDateTime;
 public class TransactionDTO {
     private Long id;
     private BigDecimal amount;
-    private String category;
-    private LocalDateTime date;
+    private Category category;
+    private LocalDateTime createdDate;
     private Long userId;
+    private TransactionType type;
+    private String note;
 }
