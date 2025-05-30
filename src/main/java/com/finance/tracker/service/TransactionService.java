@@ -1,5 +1,6 @@
 package com.finance.tracker.service;
 
+import com.finance.tracker.dto.PagedResponse;
 import com.finance.tracker.entity.Transaction;
 import com.finance.tracker.entity.TransactionType;
 import com.finance.tracker.entity.User;
@@ -8,9 +9,16 @@ import com.finance.tracker.dto.CategoryMonthlySummaryDTO;
 import com.finance.tracker.dto.TransactionDTO;
 import com.finance.tracker.dto.TransactionSummaryResponse;
 import com.finance.tracker.repository.TransactionRepository;
+import com.finance.tracker.specification.TransactionSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.HashMap;
@@ -79,4 +87,30 @@ public class TransactionService {
         );
     }
 
+    public PagedResponse<TransactionDTO> getFilteredTransactions(
+            Long userId, Long categoryId, TransactionType type,
+            LocalDate startDate, LocalDate endDate,
+            int page, int size, String sortBy, String sortDir
+    ) {
+        Sort sort = sortDir.equalsIgnoreCase("desc") ?
+                Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Specification<Transaction> spec = TransactionSpecification.withFilters(
+                userId, categoryId, type, startDate, endDate
+        );
+
+        Page<Transaction> transactionPage = transactionRepository.findAll(spec, pageable);
+        Page<TransactionDTO> dtoPage = transactionPage.map(transactionMapper::toTransactionDTO);
+
+        return new PagedResponse<>(
+                dtoPage.getContent(),
+                dtoPage.getNumber(),
+                dtoPage.getSize(),
+                dtoPage.getTotalElements(),
+                dtoPage.getTotalPages(),
+                dtoPage.isLast()
+        );
+    }
 }

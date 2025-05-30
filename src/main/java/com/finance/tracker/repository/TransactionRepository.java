@@ -3,13 +3,15 @@ package com.finance.tracker.repository;
 import com.finance.tracker.entity.Transaction;
 import com.finance.tracker.dto.CategoryMonthlySummaryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+public interface TransactionRepository extends JpaRepository<Transaction, Long>,
+        JpaSpecificationExecutor<Transaction> {
     List<Transaction> findByUserId(Long userId);
     List<Transaction> findByUserIdAndCategoryId(Long user_id, Integer category_id);
     List<Transaction> findByUserIdAndCreatedAtBetween(Long userId, LocalDateTime start, LocalDateTime end);
