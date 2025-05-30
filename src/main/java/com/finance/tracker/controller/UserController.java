@@ -1,7 +1,7 @@
 package com.finance.tracker.controller;
 
 import com.finance.tracker.entity.User;
-import com.finance.tracker.model.UserDTO;
+import com.finance.tracker.dto.UserDTO;
 import com.finance.tracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

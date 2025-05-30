@@ -1,6 +1,5 @@
-package com.finance.tracker.model;
+package com.finance.tracker.dto;
 
-import com.finance.tracker.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

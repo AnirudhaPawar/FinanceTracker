@@ -2,7 +2,7 @@ package com.finance.tracker.service;
 
 import com.finance.tracker.entity.User;
 import com.finance.tracker.mapper.UserMapper;
-import com.finance.tracker.model.UserDTO;
+import com.finance.tracker.dto.UserDTO;
 import com.finance.tracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

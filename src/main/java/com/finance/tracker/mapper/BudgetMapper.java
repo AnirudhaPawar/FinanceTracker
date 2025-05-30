@@ -3,8 +3,8 @@ package com.finance.tracker.mapper;
 import com.finance.tracker.entity.Budget;
 import com.finance.tracker.entity.Category;
 import com.finance.tracker.entity.User;
-import com.finance.tracker.model.BudgetDTO;
-import com.finance.tracker.model.CategoryDTO;
+import com.finance.tracker.dto.BudgetDTO;
+import com.finance.tracker.dto.CategoryDTO;
 import org.springframework.stereotype.Component;
 
 import static java.util.Objects.isNull;

@@ -1,7 +1,7 @@
 package com.finance.tracker.mapper;
 
 import com.finance.tracker.entity.User;
-import com.finance.tracker.model.UserDTO;
+import com.finance.tracker.dto.UserDTO;
 import org.springframework.stereotype.Component;
 
 @Component
