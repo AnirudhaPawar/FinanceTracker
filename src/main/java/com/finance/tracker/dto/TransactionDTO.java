@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +19,5 @@ public class TransactionDTO {
     private Long userId;
     private TransactionType type;
     private String note;
+    private Set<String> tags;
 }

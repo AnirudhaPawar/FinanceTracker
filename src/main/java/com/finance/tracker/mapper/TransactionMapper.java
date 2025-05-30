@@ -7,7 +7,6 @@ import com.finance.tracker.exception.ResourceNotFoundException;
 import com.finance.tracker.dto.CategoryDTO;
 import com.finance.tracker.dto.TransactionDTO;
 import com.finance.tracker.repository.CategoryRepository;
-import com.finance.tracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,6 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 public class TransactionMapper {
 
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
 
     public TransactionDTO toTransactionDTO(Transaction t) {
         return new TransactionDTO(
@@ -28,7 +26,8 @@ public class TransactionMapper {
                 t.getCreatedAt(),
                 t.getUser().getId(),
                 t.getType(),
-                t.getNote() != null ? t.getNote() : EMPTY
+                t.getNote() != null ? t.getNote() : EMPTY,
+                t.getTags()
         );
     }
 
@@ -45,6 +44,7 @@ public class TransactionMapper {
         transaction.setCreatedAt(dto.getCreatedDate());
         transaction.setType(dto.getType());
         transaction.setNote(dto.getNote());
+        transaction.setTags(dto.getTags());
         return transaction;
     }
 

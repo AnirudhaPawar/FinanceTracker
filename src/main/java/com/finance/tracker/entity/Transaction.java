@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(schema = "finance_db", name = "transactions")
@@ -37,6 +39,12 @@ public class Transaction {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @ElementCollection
+    @CollectionTable(schema = "finance_db", name = "transaction_tags", joinColumns = @JoinColumn(name = "transaction_id"))
+    @Column(name = "tag")
+    private Set<String> tags = new HashSet<>();
+
 
     @PrePersist
     protected void onCreate() {

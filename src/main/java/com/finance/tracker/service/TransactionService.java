@@ -89,6 +89,7 @@ public class TransactionService {
 
     public PagedResponse<TransactionDTO> getFilteredTransactions(
             Long userId, Long categoryId, TransactionType type,
+            String note, String tag,
             LocalDate startDate, LocalDate endDate,
             int page, int size, String sortBy, String sortDir
     ) {
@@ -98,7 +99,7 @@ public class TransactionService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Specification<Transaction> spec = TransactionSpecification.withFilters(
-                userId, categoryId, type, startDate, endDate
+                userId, categoryId, type, note, tag, startDate, endDate
         );
 
         Page<Transaction> transactionPage = transactionRepository.findAll(spec, pageable);

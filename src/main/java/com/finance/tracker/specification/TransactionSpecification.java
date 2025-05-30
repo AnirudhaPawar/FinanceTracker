@@ -15,11 +15,9 @@ import java.util.List;
 public class TransactionSpecification {
 
     public static Specification<Transaction> withFilters(
-            Long userId,
-            Long categoryId,
-            TransactionType type,
-            LocalDate startDate,
-            LocalDate endDate
+            Long userId, Long categoryId, TransactionType type,
+            String note, String tag,
+            LocalDate startDate, LocalDate endDate
     ) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -36,6 +34,14 @@ public class TransactionSpecification {
 
             if (type != null) {
                 predicates.add(cb.equal(root.get("type"), type));
+            }
+
+            if (note != null && !note.isBlank())
+                predicates.add(cb.like(cb.lower(root.get("note")), "%" + note.toLowerCase() + "%"));
+
+            if (tag != null && !tag.isBlank()) {
+                Join<Transaction, String> tagsJoin = root.joinSet("tags", JoinType.LEFT);
+                predicates.add(cb.equal(tagsJoin, tag));
             }
 
             if (startDate != null) {
