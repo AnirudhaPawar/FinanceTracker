@@ -2,17 +2,17 @@ package com.finance.tracker.service;
 
 import com.finance.tracker.entity.Transaction;
 import com.finance.tracker.entity.TransactionType;
+import com.finance.tracker.entity.User;
+import com.finance.tracker.mapper.TransactionMapper;
+import com.finance.tracker.model.CategoryMonthlySummaryDTO;
 import com.finance.tracker.model.TransactionDTO;
 import com.finance.tracker.model.TransactionSummaryResponse;
 import com.finance.tracker.repository.TransactionRepository;
-import com.finance.tracker.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,22 +23,25 @@ import java.util.stream.Collectors;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
 
-    public Transaction saveTransaction(Transaction transaction) {
-        return transactionRepository.save(transaction);
+    public TransactionDTO saveTransaction(TransactionDTO transactionDTO, User user) {
+        Transaction transaction = transactionMapper.toTransactionEntity(transactionDTO, user);
+        transaction = transactionRepository.save(transaction);
+        return transactionMapper.toTransactionDTO(transaction);
     }
 
     public List<TransactionDTO> getAllTransactions() {
         List<Transaction> transactions = transactionRepository.findAll();
         return transactions.stream()
-                .map(MapperUtil::toTransactionDTO)
+                .map(transactionMapper::toTransactionDTO)
                 .collect(Collectors.toList());
     }
 
     public List<TransactionDTO> getAllTransactionsByUser(Long userId) {
         List<Transaction> transactions = transactionRepository.findByUserId(userId);
         return transactions.stream()
-                .map(MapperUtil::toTransactionDTO)
+                .map(transactionMapper::toTransactionDTO)
                 .collect(Collectors.toList());
     }
 
@@ -69,4 +72,11 @@ public class TransactionService {
 
         return response;
     }
+
+    public List<CategoryMonthlySummaryDTO> getMonthlyCategorySummary(Long userId, YearMonth month) {
+        return transactionRepository.getCategorySummaryByMonth(
+                userId, month.getMonthValue(), month.getYear()
+        );
+    }
+
 }

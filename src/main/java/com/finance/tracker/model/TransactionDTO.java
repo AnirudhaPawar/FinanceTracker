@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDTO {
-    private Long id;
     private BigDecimal amount;
     private CategoryDTO category;
     private LocalDateTime createdDate;
