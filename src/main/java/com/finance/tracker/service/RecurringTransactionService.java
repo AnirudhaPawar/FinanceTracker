@@ -16,8 +16,8 @@ public class RecurringTransactionService {
 
     private final RecurringTransactionRepository repository;
 
-    public List<RecurringTransaction> findAll() {
-        return repository.findAll();
+    public List<RecurringTransactionDTO> findAll() {
+        return repository.findAll().stream().map(RecurringTransactionMapper::toDto).toList();
     }
 
     public Optional<RecurringTransaction> findById(Long id) {

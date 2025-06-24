@@ -28,7 +28,9 @@ public class RecurringTransactionMapper {
     public static RecurringTransactionDTO toDto(RecurringTransaction entity) {
         RecurringTransactionDTO dto = new RecurringTransactionDTO();
         dto.setUserId(entity.getUser().getId());
+        dto.setId(entity.getId());
         dto.setCategoryId(entity.getCategory().getId());
+        dto.setCategoryName(entity.getCategory().getName());
         dto.setType(entity.getType());
         dto.setAmount(entity.getAmount());
         dto.setNote(entity.getNote());

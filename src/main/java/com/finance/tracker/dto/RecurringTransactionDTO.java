@@ -41,4 +41,7 @@ public class RecurringTransactionDTO {
     private LocalDate nextDueDate;
 
     private Boolean active = true;
+
+    private String categoryName;
+    private Long id;
 }

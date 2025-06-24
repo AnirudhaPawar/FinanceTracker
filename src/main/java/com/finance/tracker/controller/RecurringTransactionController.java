@@ -27,7 +27,7 @@ public class RecurringTransactionController {
 
 
     @GetMapping
-    public List<RecurringTransaction> getAll() {
+    public List<RecurringTransactionDTO> getAll() {
         return service.findAll();
     }
 
@@ -43,5 +43,16 @@ public class RecurringTransactionController {
         Category category = categoryService.findById(dto.getCategoryId());
         RecurringTransaction rt = RecurringTransactionMapper.toEntity(dto, user, category);
         return ResponseEntity.ok(service.save(rt));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> edit(@PathVariable Long id, @Valid @RequestBody RecurringTransactionDTO dto) {
+        return service.findById(id).map(existingTransaction -> {
+            User user = userUtil.getCurrentUser();
+            Category category = categoryService.findById(dto.getCategoryId());
+            RecurringTransaction updatedTransaction = RecurringTransactionMapper.toEntity(dto, user, category);
+            updatedTransaction.setId(existingTransaction.getId());
+            return ResponseEntity.ok(service.save(updatedTransaction));
+        }).orElse(ResponseEntity.notFound().build());
     }
 }
