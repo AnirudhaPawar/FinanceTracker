@@ -17,6 +17,11 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public Category getCategoryById(Integer id) {
+        return categoryRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+    }
+
     public Category findById(Integer id) {
         return categoryRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new RuntimeException("Category not found"));
