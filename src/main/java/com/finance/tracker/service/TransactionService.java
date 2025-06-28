@@ -39,6 +39,27 @@ public class TransactionService {
         return transactionMapper.toTransactionDTO(transaction);
     }
 
+    public TransactionDTO editTransaction(Long transactionId, TransactionDTO updatedTransactionDTO, User user) {
+        Transaction existingTransaction = transactionRepository.findByIdAndUserId(transactionId, user.getId())
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        existingTransaction.setAmount(updatedTransactionDTO.getAmount());
+        existingTransaction.setCategory(transactionMapper.toCategoryEntity(updatedTransactionDTO.getCategory()));
+        existingTransaction.setType(updatedTransactionDTO.getType());
+        existingTransaction.setNote(updatedTransactionDTO.getNote());
+        existingTransaction.setTags(updatedTransactionDTO.getTags());
+        existingTransaction.setCreatedAt(updatedTransactionDTO.getCreatedDate());
+
+        Transaction updatedTransaction = transactionRepository.save(existingTransaction);
+        return transactionMapper.toTransactionDTO(updatedTransaction);
+    }
+
+    public void deleteTransaction(Long transactionId, User user) {
+        Transaction transaction = transactionRepository.findByIdAndUserId(transactionId, user.getId())
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+        transactionRepository.delete(transaction);
+    }
+
     public List<TransactionDTO> getAllTransactions() {
         List<Transaction> transactions = transactionRepository.findAll();
         return transactions.stream()

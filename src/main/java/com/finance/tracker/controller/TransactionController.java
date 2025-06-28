@@ -33,6 +33,22 @@ public class TransactionController {
         return transactionService.saveTransaction(transaction, user);
     }
 
+    @PutMapping("/{transactionId}")
+    public TransactionDTO editTransaction(
+            @PathVariable Long transactionId,
+            @RequestBody TransactionDTO updatedTransaction
+    ) {
+        User user = userUtil.getCurrentUser();
+        return transactionService.editTransaction(transactionId, updatedTransaction, user);
+    }
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long transactionId) {
+        User user = userUtil.getCurrentUser();
+        transactionService.deleteTransaction(transactionId, user);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     @Authenticated
     public List<TransactionDTO> getAllTransactions() {

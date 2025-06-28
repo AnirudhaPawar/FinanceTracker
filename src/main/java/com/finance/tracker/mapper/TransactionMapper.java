@@ -21,6 +21,7 @@ public class TransactionMapper {
 
     public TransactionDTO toTransactionDTO(Transaction t) {
         return new TransactionDTO(
+                t.getId(),
                 t.getAmount(),
                 nonNull(t.getCategory()) ? CategoryDTO.builder().id(Math.toIntExact(t.getCategory().getId())).name(t.getCategory().getName()).build() : null,
                 t.getCreatedAt(),
@@ -48,6 +49,12 @@ public class TransactionMapper {
         return transaction;
     }
 
+    public Category toCategoryEntity(CategoryDTO categoryDTO) {
+        return Category.builder()
+                .id(Math.toIntExact(categoryDTO.getId()))
+                .name(categoryDTO.getName())
+                .build();
+    }
 
 }
 
