@@ -28,6 +28,15 @@ public class User {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
 
+    @Column(name = "firstname", nullable = false, length = 100)
+    private String firstName;
+
+    @Column(name = "lastname", nullable = false, length = 100)
+    private String lastName;
+
+    @Column(name = "contact", length = 15)
+    private String contact;
+
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 }

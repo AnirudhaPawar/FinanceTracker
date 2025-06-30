@@ -39,6 +39,9 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         existingUser.setUsername(user.getUsername());
         existingUser.setEmail(user.getEmail());
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setContact(user.getContact());
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }

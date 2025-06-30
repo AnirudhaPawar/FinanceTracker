@@ -15,6 +15,9 @@ public class UserMapper {
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setCreatedAt(user.getCreatedAt());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setContact(user.getContact());
         return dto;
     }
 
@@ -25,7 +28,9 @@ public class UserMapper {
         user.setId(dto.getId()); // optional: may be null for creation
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
-
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setContact(dto.getContact());
         return user;
     }
 }
