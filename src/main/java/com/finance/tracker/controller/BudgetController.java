@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.YearMonth;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/budgets")
@@ -41,6 +42,19 @@ public class BudgetController {
     public List<BudgetDTO> getBudgets() {
         User user = userUtil.getCurrentUser();
         return budgetService.getBudgetsByUserId(user.getId());
+    }
+
+    @Authenticated
+    @GetMapping("/by-month")
+    public ResponseEntity<List<BudgetDTO>> getBudgetsByMonth(
+            @RequestParam("month") @DateTimeFormat(pattern = "yyyy-MM") YearMonth month
+    ) {
+        User user = userUtil.getCurrentUser();
+        List<Budget> budgets = budgetService.findByUserIdAndMonth(user.getId(), month);
+        List<BudgetDTO> budgetDTOs = budgets.stream()
+                .map(BudgetMapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(budgetDTOs);
     }
 
     @Authenticated

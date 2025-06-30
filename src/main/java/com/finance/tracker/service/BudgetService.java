@@ -56,6 +56,12 @@ public class BudgetService {
         budgetRepository.deleteById(budget.getId());
     }
 
+    public List<Budget> findByUserIdAndMonth(Long userId, YearMonth month) {
+        int year = month.getYear();
+        String monthValue = month.toString();
+        return budgetRepository.findByUserIdAndMonth(userId, monthValue);
+    }
+
     public List<BudgetVsActualDTO> getBudgetVsActualSummary(Long userId, YearMonth month) {
         int year = month.getYear();
         String monthValue = month.toString();
