@@ -32,9 +32,8 @@ public class RecurringTransactionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecurringTransaction> getById(@PathVariable Long id) {
-        return service.findById(id).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<RecurringTransactionDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
@@ -47,12 +46,17 @@ public class RecurringTransactionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id, @Valid @RequestBody RecurringTransactionDTO dto) {
-        return service.findById(id).map(existingTransaction -> {
-            User user = userUtil.getCurrentUser();
-            Category category = categoryService.findById(dto.getCategoryId());
-            RecurringTransaction updatedTransaction = RecurringTransactionMapper.toEntity(dto, user, category);
-            updatedTransaction.setId(existingTransaction.getId());
-            return ResponseEntity.ok(service.save(updatedTransaction));
-        }).orElse(ResponseEntity.notFound().build());
+        RecurringTransactionDTO existingTransaction = service.findById(id);
+        User user = userUtil.getCurrentUser();
+        Category category = categoryService.findById(dto.getCategoryId());
+        RecurringTransaction updatedTransaction = RecurringTransactionMapper.toEntity(dto, user, category);
+        updatedTransaction.setId(existingTransaction.getId());
+        return ResponseEntity.ok(service.save(updatedTransaction));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

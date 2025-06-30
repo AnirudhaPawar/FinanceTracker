@@ -4,6 +4,7 @@ import com.finance.tracker.dto.RecurringTransactionDTO;
 import com.finance.tracker.entity.RecurringTransaction;
 import com.finance.tracker.mapper.RecurringTransactionMapper;
 import com.finance.tracker.repository.RecurringTransactionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,9 @@ public class RecurringTransactionService {
         return repository.findAll().stream().map(RecurringTransactionMapper::toDto).toList();
     }
 
-    public Optional<RecurringTransaction> findById(Long id) {
-        return repository.findById(id);
+    public RecurringTransactionDTO findById(Long id) {
+        RecurringTransaction recurringTransaction = repository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return RecurringTransactionMapper.toDto(recurringTransaction);
     }
 
     public RecurringTransactionDTO save(RecurringTransaction rt) {
