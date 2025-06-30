@@ -28,7 +28,14 @@ public class RecurringTransactionController {
 
     @GetMapping
     public List<RecurringTransactionDTO> getAll() {
+        User user = userUtil.getCurrentUser();
         return service.findAll();
+    }
+
+    @GetMapping("/user")
+    public List<RecurringTransactionDTO> getAllForUser() {
+        User user = userUtil.getCurrentUser();
+        return service.findByUserId(user.getId());
     }
 
     @GetMapping("/{id}")

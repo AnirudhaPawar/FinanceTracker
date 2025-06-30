@@ -26,6 +26,11 @@ public class RecurringTransactionService {
         return RecurringTransactionMapper.toDto(recurringTransaction);
     }
 
+    public List<RecurringTransactionDTO> findByUserId(Long id) {
+        List<RecurringTransaction> recurringTransactions = repository.findByUserId(id);
+        return recurringTransactions.stream().map(RecurringTransactionMapper::toDto).toList();
+    }
+
     public RecurringTransactionDTO save(RecurringTransaction rt) {
         RecurringTransaction recurringTransaction = repository.save(rt);
         return RecurringTransactionMapper.toDto(recurringTransaction);

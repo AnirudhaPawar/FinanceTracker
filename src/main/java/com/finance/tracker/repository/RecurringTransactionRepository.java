@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RecurringTransactionRepository extends JpaRepository<RecurringTransaction, Long> {
     List<RecurringTransaction> findByActiveTrueAndNextDueDateLessThanEqual(LocalDate today);
+    List<RecurringTransaction> findByUserId(Long userId);
 }
