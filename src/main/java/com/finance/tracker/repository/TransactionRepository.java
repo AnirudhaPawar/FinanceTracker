@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.swing.text.html.Option;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,5 +35,26 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     List<Object[]> getTotalSpentPerCategory(@Param("userId") Long userId,
                                             @Param("month") int month,
                                             @Param("year") int year);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t " +
+            "WHERE t.user.id = :userId AND t.category.name != 'Salary' AND t.createdAt >= :start AND t.createdAt < :end")
+    BigDecimal getMonthlyTotal(@Param("userId") Long userId,
+                               @Param("start") LocalDateTime start,
+                               @Param("end") LocalDateTime end);
+
+    @Query("SELECT t.category.name FROM Transaction t " +
+            "WHERE t.user.id = :userId AND t.createdAt >= :start AND t.createdAt < :end " +
+            "GROUP BY t.category.name ORDER BY SUM(t.amount) DESC")
+    List<String> getTopSpendingCategory(@Param("userId") Long userId,
+                                        @Param("start") LocalDateTime start,
+                                        @Param("end") LocalDateTime end);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t " +
+            "WHERE t.user.id = :userId AND t.createdAt >= :start AND t.createdAt < :end")
+    BigDecimal getTotalBetweenDates(@Param("userId") Long userId,
+                                    @Param("start") LocalDateTime start,
+                                    @Param("end") LocalDateTime end);
+
+
 
 }
