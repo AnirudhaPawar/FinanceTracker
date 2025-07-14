@@ -8,9 +8,9 @@ VALUES ('Groceries'),
        ('Freelance');
 
 -- Insert sample users (if needed; skip if users already exist)
-INSERT INTO finance_db.users (username, email, password)
-VALUES ('test1', 'test1@gmail.com', '$2a$10$cdOSiLB4NFKIU/XYx7n4BOZcJI8zRNHQsnABDYCMBPDKVpoEiS3ny'), -- Test@123
-       ('test2', 'test2@gmail.com', '$2a$10$cdOSiLB4NFKIU/XYx7n4BOZcJI8zRNHQsnABDYCMBPDKVpoEiS3ny'); -- Test@123
+INSERT INTO finance_db.users (username, email, password, firstname, lastname, contact)
+VALUES ('test1', 'test1@gmail.com', '$2a$10$cdOSiLB4NFKIU/XYx7n4BOZcJI8zRNHQsnABDYCMBPDKVpoEiS3ny', 'test', '1', '1234567890'), -- Test@123
+       ('test2', 'test2@gmail.com', '$2a$10$cdOSiLB4NFKIU/XYx7n4BOZcJI8zRNHQsnABDYCMBPDKVpoEiS3ny', 'test', '2', '0987654321'); -- Test@123
 
 -- Insert sample transactions
 INSERT INTO finance_db.transactions (user_id, category_id, type, amount, note, created_at)
